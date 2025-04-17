@@ -33,6 +33,8 @@ Copy `.env` to `.env.local` and update the variables:
 cp .env .env.local
 ```
 
+***Note:** For convenience, the `.env` file is already shipped. Remember to ignore this file on real repositories.*
+
 ### 4. Run Migrations and Seeds
 ```bash
 npm run migrate
