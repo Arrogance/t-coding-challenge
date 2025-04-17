@@ -1,0 +1,137 @@
+openapi: 3.0.3
+info:
+  title: T Code Challenge API
+  version: 1.0.0
+  description: API for managing customers and their credits
+
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+
+paths:
+  /customers:
+    get:
+      summary: List all customers sorted by credit
+      responses:
+        '200':
+          description: A list of customers
+    post:
+      summary: Create a new customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerInput'
+      responses:
+        '201':
+          description: Customer created
+
+  /customers/{id}:
+    get:
+      summary: Get a customer by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Customer found
+    patch:
+      summary: Update a customer
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerInput'
+      responses:
+        '200':
+          description: Customer updated
+    delete:
+      summary: Delete a customer
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Customer deleted
+
+  /customers/{id}/restore:
+    put:
+      summary: Restore a deleted customer
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Customer restored
+
+  /customers/{customerId}/credit:
+    post:
+      summary: Add credit to a customer
+      parameters:
+        - in: path
+          name: customerId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditInput'
+      responses:
+        '201':
+          description: Credit added
+
+  /customers/{customerId}/credits:
+    get:
+      summary: List all credits for a customer
+      parameters:
+        - in: path
+          name: customerId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of credits
+
+components:
+  schemas:
+    CustomerInput:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+
+    CreditInput:
+      type: object
+      properties:
+        amount:
+          type: number
+        type:
+          type: string
+          enum: [deposit, purchase, refund]
